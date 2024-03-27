@@ -1,54 +1,68 @@
-const fs = require('fs');
-const readline = require('readline');
-const crypto = require('crypto');
-const algorithm = 'aes-256-ctr';
+# How to Use NodeEncryptionCLI
 
-function encryptFile(file, encryptedFile, password) {
-  const IV = crypto.randomBytes(16);
-  const data = fs.readFileSync(file);
-  let cipher = crypto.createCipheriv(algorithm, crypto.createHash('sha256').update(password).digest(), IV);
-  let encrypted = Buffer.concat([IV, cipher.update(data), cipher.final()]);
-  fs.writeFileSync(encryptedFile, encrypted);
-}
 
-let sourceFile, destinationFile;
+This how-to guide is tailored for individuals looking to secure their digital files using AES-256 encryption, utilizing a straightforward NodeJS Command Line Interface (CLI) tool. By following the outlined steps, users will learn how to encrypt and decrypt files, ensuring that their sensitive data remains protected and accessible only to those with the appropriate password. This documentation is particularly beneficial for developers, IT professionals, and anyone with a basic understanding of the command line and NodeJS, who are concerned with data privacy and security.
 
-// Prepare readline interface
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
 
-rl._writeToOutput = function _writeToOutput(stringToWrite) {
-  if (rl.stdoutMuted)
-    rl.output.write("*");
-  else
-    rl.output.write(stringToWrite);
-};
+## Prerequisites
 
-rl.question('Please provide the filepath to the file you want to encrypt: ', filePath => {
-  // Set the source file and destination filepath
-  sourceFile = filePath;
-  destinationFile = `${sourceFile.substring(0, sourceFile.lastIndexOf('.'))}Encrypted${sourceFile.substring(sourceFile.lastIndexOf('.'), sourceFile.length)}`;
+This project requires NodeJS.
 
-  // Note: that immediately after this question, rl.stdoutMuted becomes true and raw mode set to true
+Make sure that:
+- Have a working knowledge of CLI tools and how to use them.
+- You are ready to securely store any passwords for files you encrypt. 
+- You have NodeJS installed on your system. 
+- You have a file to encrypt.
 
-  rl.question('Enter Encryption Password: ', password => {
-    // Unmute output and disable raw mode
-    rl.stdoutMuted = false;
-    process.stdin.setRawMode(false);
+## How to install NodeJS
 
-    // Prepare for next line
-    console.log('');
+First check if NodeJS is installed on your system
 
-    // Call the encryptFile function
-    encryptFile(sourceFile, destinationFile, password);
+1.  Check for NodeJS Installation. If NodeJS is already installed, skip ahead to Usage
 
-    // Close the readline interface
-    rl.close();
-  });
+```bash
+    node --verison
+ ```
 
-  // Enable raw mode and mute output
-  rl.stdoutMuted = true;
-  process.stdin.setRawMode(true);
-});
+2. If NodeJS is not installed, please follow this link to the node website to download and install NodeJS
+   - [link](https://nodejs.org/en/download/)
+
+## Encryption
+### Encrypt a file
+
+
+1. Enter the command:
+
+```bash
+ node encrypt.js
+```
+2. Enter the appropriate filepath for the file you want to encrypt
+```bash
+ /Path-To-Your-File.mov
+```
+3. CLI will prompt you for a password. Provide a password. 
+   - There are no password length or character type requirements at this time.
+```bash
+ enter-password
+```
+4. Check original file location for encrypted version of file
+
+## Decryption
+
+### Decrypt a file
+
+1. Decrypt
+
+```bash
+ node decrypt.js
+```
+2. Enter the appropriate filepath for the file you want to decrypt
+```bash
+ /Path-To-Your-Encrypted-File.mov
+```
+3. CLI will prompt you for the file's password. Provide the appropriate password.
+   - There are no password length or character type requirements at this time.
+```bash
+ enter-password
+```
+4. Check encrypted file location for decrypted version of file
