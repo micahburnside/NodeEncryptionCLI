@@ -33,12 +33,14 @@ First check if NodeJS is installed on your system
 ### Encrypt a file
 
 
-1. Enter the command:
+1. Navigate to this project's folder and enter the following command to add an encryption layer to a file of your choosing:
 
 ```bash
  node encrypt.js
 ```
 2. Enter the appropriate filepath for the file you want to decrypt. Accepts any filetype: .jpg, .png, .mpeg, .mov, .mp3, .pdf, .zip, etc.
+    - You can drag and drop the file directly into the teriminal window text field to automatically get the file path. 
+    - *Make sure you remove any white-space from the end of the url because the encryption operation will fail. That issue will be patched soon.
 ```bash
  /Path-To-Your-Encrypted-File.filetype
 ```
