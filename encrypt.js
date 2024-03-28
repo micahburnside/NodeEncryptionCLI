@@ -14,28 +14,28 @@ function encryptFile(file, encryptedFile, password) {
 let sourceFile, destinationFile;
 
 // Prepare readline interface
-const rl = readline.createInterface({
+const readLineInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-rl._writeToOutput = function _writeToOutput(stringToWrite) {
-  if (rl.stdoutMuted)
-    rl.output.write("*");
+readLineInterface._writeToOutput = function _writeToOutput(stringToWrite) {
+  if (readLineInterface.stdoutMuted)
+    readLineInterface.output.write("*");
   else
-    rl.output.write(stringToWrite);
+    readLineInterface.output.write(stringToWrite);
 };
 
-rl.question('Please provide the filepath to the file you want to encrypt: ', filePath => {
+readLineInterface.question('Please provide the filepath to the file you want to encrypt: ', filePath => {
   // Set the source file and destination filepath
   sourceFile = filePath;
   destinationFile = `${sourceFile.substring(0, sourceFile.lastIndexOf('.'))}Encrypted${sourceFile.substring(sourceFile.lastIndexOf('.'), sourceFile.length)}`;
 
-  // Note: that immediately after this question, rl.stdoutMuted becomes true and raw mode set to true
+  // Note: that immediately after this question, readLineInterface.stdoutMuted becomes true and raw mode set to true
 
-  rl.question('Enter Encryption Password: ', password => {
+  readLineInterface.question('Enter Encryption Password: ', password => {
     // Unmute output and disable raw mode
-    rl.stdoutMuted = false;
+    readLineInterface.stdoutMuted = false;
     process.stdin.setRawMode(false);
 
     // Prepare for next line
@@ -45,10 +45,10 @@ rl.question('Please provide the filepath to the file you want to encrypt: ', fil
     encryptFile(sourceFile, destinationFile, password);
 
     // Close the readline interface
-    rl.close();
+    readLineInterface.close();
   });
 
   // Enable raw mode and mute output
-  rl.stdoutMuted = true;
+  readLineInterface.stdoutMuted = true;
   process.stdin.setRawMode(true);
 });
