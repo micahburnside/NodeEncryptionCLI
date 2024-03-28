@@ -36,7 +36,7 @@ readlineInterface.question('Please provide the filepath to the file you want to 
 
   // Note: that immediately after this question, readlineInterface.stdoutMuted becomes true and raw mode set to true
 
-  readlineInterface.question('Enter Decryption Password: ', password => {
+  readlineInterface.question('Please enter the Password: ', password => {
     // Unmute output and disable raw mode
     readlineInterface.stdoutMuted = false;
     process.stdin.setRawMode(false);

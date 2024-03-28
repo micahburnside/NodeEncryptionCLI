@@ -55,7 +55,7 @@ First check if NodeJS is installed on your system
 
 ### Decrypt a file
 
-1. Run Decryption Script
+1. Navigate to this project's folder and enter the following command to decrypt an encrypted file:
 
 ```bash
  node decrypt.js
