@@ -15,30 +15,30 @@ function decryptFile(file, decryptedFile, password) {
 let sourceFile, destinationFile;
 
 // Prepare readline interface
-const rl = readline.createInterface({
+const readlineInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-rl._writeToOutput = function _writeToOutput(stringToWrite) {
-  if (rl.stdoutMuted)
-    rl.output.write("*");
+readlineInterface._writeToOutput = function _writeToOutput(stringToWrite) {
+  if (readlineInterface.stdoutMuted)
+    readlineInterface.output.write("*");
   else
-    rl.output.write(stringToWrite);
+    readlineInterface.output.write(stringToWrite);
 };
 
-rl.question('Please provide the filepath to the file you want to decrypt: ', filePath => {
+readlineInterface.question('Please provide the filepath to the file you want to decrypt: ', filePath => {
   // Set the source file and destination filepath
   sourceFile = filePath;
   // We need to replace "Encrypted" with "Decrypted" in the file name
   const base = sourceFile.replace('Encrypted', '');
   destinationFile = `${base.substring(0, base.lastIndexOf('.'))}Decrypted${base.substring(base.lastIndexOf('.'), base.length)}`;
 
-  // Note: that immediately after this question, rl.stdoutMuted becomes true and raw mode set to true
+  // Note: that immediately after this question, readlineInterface.stdoutMuted becomes true and raw mode set to true
 
-  rl.question('Enter Decryption Password: ', password => {
+  readlineInterface.question('Enter Decryption Password: ', password => {
     // Unmute output and disable raw mode
-    rl.stdoutMuted = false;
+    readlineInterface.stdoutMuted = false;
     process.stdin.setRawMode(false);
 
     // Prepare for next line
@@ -48,10 +48,10 @@ rl.question('Please provide the filepath to the file you want to decrypt: ', fil
     decryptFile(sourceFile, destinationFile, password);
 
     // Close the readline interface
-    rl.close();
+    readlineInterface.close();
   });
 
   // Enable raw mode and mute output
-  rl.stdoutMuted = true;
+  readlineInterface.stdoutMuted = true;
   process.stdin.setRawMode(true);
 });
