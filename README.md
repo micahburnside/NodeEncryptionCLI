@@ -27,6 +27,8 @@ First check if NodeJS is installed on your system
 2. If NodeJS is not installed, please follow this link to the node website to download and install NodeJS
     - [link](https://nodejs.org/en/download/)
 
+# Usage:
+
 ## Encryption
 ### Encrypt a file
 
