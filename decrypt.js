@@ -72,3 +72,28 @@ readlineInterface.question('Please provide the filepath to the file you want to 
   readlineInterface.stdoutMuted = true;
   process.stdin.setRawMode(true);
 });
+
+
+//TODO(AES-256 Decryption)
+
+// Here's the step-by-step pseudocode for AES-256 decryption:
+// Import necessary crypto module (In Node.js, const crypto = require('crypto'))
+// Load the encrypted data, the AES key, and the initialization vector (IV) from the storage.
+//   encrypted_data = load encrypted data from storage AES_KEY = load AES key from storage IV = load IV from storage
+// Create an AES-256 decipher using the AES key and IV.
+//   AES_DECIPHER = create AES-256 decipher with AES_KEY and IV
+// Decrypt the data by feeding the encrypted data into the AES-256 decipher. Similar to the encryption process, this will often need to be done in two parts: an 'update' phase that decrypts most of the data, and a 'final' phase that decrypts any remaining data and returns the plaintext.
+//   decrypted_data = AES_DECIPHER.decrypt(encrypted_data)
+// The decrypted_data is now the original plaintext data.
+
+//TODO(RSA Decryption)
+
+// Here's the step-by-step pseudocode for RSA decryption:
+// Import necessary 'crypto' module (In Node.js, const crypto = require('crypto')).
+// Load the RSA private key and the encrypted AES key from the storage.
+//   encrypted_AES_KEY = load the encrypted AES key from storage RSA_private_Key = load the RSA private key from storage
+// Decrypt the AES key with RSA private key.
+//   AES_KEY = RSA_private_Key.decrypt(encrypted_AES_KEY)
+// The AES_KEY is now the original AES key used for AES Cipher. Feed this key into the AES decryption process (as stated in Part 1) to decrypt your original data.
+//   This process essentially goes back through the encryption process in reverse, using the private key to decrypt the AES key, and then using that to decrypt the original data. Please keep in mind real implementation code in Javascript or other programming languages may vary and this pseudocode gives you a descriptive walkthrough of how decryption will work.
+//
