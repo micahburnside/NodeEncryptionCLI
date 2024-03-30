@@ -29,8 +29,8 @@ function decryptFile(file, decryptedFile, password) {
   //write the decrypted data to the new file
   fs.writeFileSync(decryptedFile, decrypted);
 }
-
-// Prepare readline interface
+//READLINE CLI Interface
+// Create a readline interface to receive input from the console and output back to the console, using the standard input and output streams.
 const readlineInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -42,13 +42,13 @@ readlineInterface._writeToOutput = function _writeToOutput(stringToWrite) {
   else
     readlineInterface.output.write(stringToWrite);
 };
-
 readlineInterface.question('Please provide the filepath to the file you want to decrypt: ', filePath => {
   let sourceFile, destinationFile;
   // Set the source file and destination filepath
   sourceFile = filePath;
   // We need to replace "Encrypted" with "Decrypted" in the file name
   const base = sourceFile.replace('Encrypted', '');
+  // Adds "Decrypted" to the end of the filename
   destinationFile = `${base.substring(0, base.lastIndexOf('.'))}Decrypted${base.substring(base.lastIndexOf('.'), base.length)}`;
 
   // Note: that immediately after this question, readlineInterface.stdoutMuted becomes true and raw mode set to true
