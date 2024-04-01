@@ -36,6 +36,7 @@ const readlineInterface = readline.createInterface({
   output: process.stdout
 });
 
+// hides text input by replacing it with * when entering file password
 readlineInterface._writeToOutput = function _writeToOutput(stringToWrite) {
   if (readlineInterface.stdoutMuted)
     readlineInterface.output.write("*");
