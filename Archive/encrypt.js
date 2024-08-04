@@ -1,12 +1,25 @@
 const fs = require('fs');
 const readline = require('readline');
 const crypto = require('crypto');
-const algorithm = 'aes-256-ctr';
+const algorithm = 'aes-256-gcm';
 
-function encryptFile(file, encryptedFile, password) {
+
+async function generateAesKey() {
+  const key = await crypto.subtle.generateKey(
+    {
+      name: "AES-GCM",
+      length: 256,
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  return key;
+}
+
+function encryptFile(file, encryptedFile, aesKey) {
   const IV = crypto.randomBytes(16);
   const data = fs.readFileSync(file);
-  let cipher = crypto.createCipheriv(algorithm, crypto.createHash('sha256').update(password).digest(), IV);
+  let cipher = crypto.createCipheriv(algorithm, crypto.createHash('sha256').update(aesKey).digest(), IV);
   let encrypted = Buffer.concat([IV, cipher.update(data), cipher.final()]);
   fs.writeFileSync(encryptedFile, encrypted);
 }
@@ -33,7 +46,7 @@ readLineInterface.question('Please provide the filepath to the file you want to 
 
   // Note: that immediately after this question, readLineInterface.stdoutMuted becomes true and raw mode set to true
 
-  readLineInterface.question('Enter Encryption Password: ', password => {
+  readLineInterface.question('Enter Encryption Password: ', aesKey => {
     // Unmute output and disable raw mode
     readLineInterface.stdoutMuted = false;
     process.stdin.setRawMode(false);
@@ -42,7 +55,7 @@ readLineInterface.question('Please provide the filepath to the file you want to 
     console.log('');
 
     // Call the encryptFile function
-    encryptFile(sourceFile, destinationFile, password);
+    encryptFile(sourceFile, destinationFile, aesKey);
 
     // Close the readline interface
     readLineInterface.close();
@@ -53,6 +66,57 @@ readLineInterface.question('Please provide the filepath to the file you want to 
   process.stdin.setRawMode(true);
 });
 
+// const fs = require('fs');
+// const readline = require('readline');
+// const crypto = require('crypto');
+// const path = require('path');
+// const algorithm = 'aes-256-ctr';
+//
+// // Creating a directory for storing our keys
+// if (!fs.existsSync('./keys')) {
+//   fs.mkdirSync('./keys');
+// }
+//
+// function encryptFile(file, encryptedFile) {
+//   const AES_KEY = crypto.randomBytes(32); // creating 32-byte random AES key
+//   const IV = crypto.randomBytes(16);
+//   const data = fs.readFileSync(file);
+//   let cipher = crypto.createCipheriv(algorithm, AES_KEY, IV);
+//   let encrypted = Buffer.concat([IV, cipher.update(data), cipher.final()]);
+//   fs.writeFileSync(encryptedFile, encrypted);
+//
+//   // Get the file name without the extension
+//   let keyFileName = path.basename(sourceFile, path.extname(sourceFile));
+//   // Construct the key file path
+//   const keyFile = `keys/${keyFileName}.key`;
+//
+//   fs.writeFileSync(keyFile, AES_KEY); // saves the generated AES key in a '.key' file
+// }
+//
+// let sourceFile, destinationFile;
+//
+// // Prepare readline interface
+// const readLineInterface = readline.createInterface({
+//   input: process.stdin,
+//   output: process.stdout
+// });
+//
+// readLineInterface.question('Please provide the filepath to the file you want to encrypt: ', filePath => {
+//   // Set the source file
+//   sourceFile = filePath;
+//
+//   // Get the filename without the extension
+//   let fileName = path.basename(sourceFile, path.extname(sourceFile));
+//
+//   // Construct the destination file path
+//   destinationFile = `${fileName}Encrypted${path.extname(sourceFile)}`;
+//
+//   // Call the encryptFile function
+//   encryptFile(sourceFile, destinationFile);
+//
+//   // Close the readline interface
+//   readLineInterface.close();
+// });
 
 //TODO(AES-256 Encryption)
 //
@@ -81,3 +145,15 @@ readLineInterface.question('Please provide the filepath to the file you want to 
 //   save the encrypted AES Key save the RSA private Key
 // In this way, the heavy-duty encryption of the data is performed using a symmetric cipher (the AES-256 part), but the key used for that encryption is itself encrypted using an asymmetric cipher (the RSA part), combining the benefits of both encryption methods.
 //
+
+//TODO(MY AES STEPS)
+//
+// BOB
+// 1 - Generate AES Key
+// 2 - Wrap key with KEK algorithm
+// 3 - Display KEK, prompt user to store kek securely. (user stores AES key as KEK and never sees unwrapped version)
+// 4 - unrwap KEK, encrypt data with AES GCM
+// ALICE
+// 5 - receives AES key as KEK from Bob (Alice stores AES key as KEK and never sees unwrapped version
+// 6 - unwrap KEK with KEK algorithn
+// 7 - decrypt data with AES GCM
