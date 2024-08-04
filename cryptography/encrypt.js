@@ -118,7 +118,7 @@
 //   readLineInterface.close();
 // });
 
-const { encryptWithAES256GCM, decryptWithAES256GCM } = require('../cryptography/encrypt');
+const { encryptWithAES256GCM, decryptWithAES256GCM } = require('../cryptography/aes');
 
 const fs = require('fs');
 const readline = require('readline');
